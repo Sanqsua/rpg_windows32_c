@@ -12,7 +12,7 @@
 
 #define CALCULATE_AVG_FPS_EVERY_X_FRAMES	120
 
-#define TARGET_MICROSECONDS_PER_FRAME		16667
+#define TARGET_MICROSECONDS_PER_FRAME		16667ULL
 
 #define SIMD
 
@@ -73,45 +73,34 @@ typedef struct GAMEPERFDATA
 
 	DWORD HandleCount;
 
-	PROCESS_MEMORY_COUNTERS_EX MemInfo ;
+	PROCESS_MEMORY_COUNTERS_EX MemInfo;
 
-
-	// CPU SPECIFIC ----------------------
 	SYSTEM_INFO SystemInfo;
 
 	int64_t CurrentSystemTime;
 
 	int64_t PreviousSystemTime;
 
-	FILETIME ProcessCreationTime;
-
-	FILETIME ProcessExitTime;
-
-	int64_t CurrentUserCPUTime;
-
-	int64_t CurrentKernelCPUTime;
-
-	int64_t PreviousUserCPUTime;
-	
-	int64_t PreviousKernelCPUTime;
-
 	double CPUPercent;
-	// CPU SPECIFIC ----------------------
+
 } GAMEPERFDATA;
 
-typedef struct PLAYER {
+typedef struct PLAYER
+{
 	char Name[12];
 
-	int32_t WorldPosX;
-	
-	int32_t WorldPosY;
-	
+	int32_t ScreenPosX;
+
+	int32_t ScreenPosY;
+
 	int32_t HP;
-	
+
 	int32_t Strength;
-	
+
 	int32_t MP;
-}PLAYER;
+} PLAYER;
+
+
 LRESULT CALLBACK MainWindowProc(_In_ HWND WindowHandle, _In_ UINT Message, _In_ WPARAM WParam, _In_ LPARAM LParam);
 
 DWORD CreateMainGameWindow(void);
@@ -121,11 +110,8 @@ BOOL GameIsAlreadyRunning(void);
 void ProcessPlayerInput(void);
 
 void RenderFrameGraphics(void);
-
 #ifdef SIMD
-
 void ClearScreen(_In_ __m128i* Color);
-
 #else
-void ClearScreen2(_In_ PIXEL32* Pixel);
-#endif //SIMD
+void ClearScreen(_In_ PIXEL32* Color);
+#endif
